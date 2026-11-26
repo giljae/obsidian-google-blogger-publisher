@@ -10,7 +10,7 @@ import { RegisterHTMLHandler } from 'mathjax-full/js/handlers/html';
 import { AssistiveMmlHandler } from 'mathjax-full/js/a11y/assistive-mml';
 import { mathjax } from 'mathjax-full/js/mathjax';
 import juice from 'juice';
-import { MathJaxOutputType, SafeAny } from '../types';
+import { MathJaxOutputType } from '../types';
 
 export interface MathJaxPluginOptions {
   outputType: MathJaxOutputType;
@@ -29,9 +29,15 @@ function renderMath(content: string, display: boolean, options: MathJaxPluginOpt
   AssistiveMmlHandler(handler);
 
   const document = mathjax.document('', { InputJax: inputJax, OutputJax: outputJax });
-  const node = document.convert(content, { display, em: 16, ex: 8, containerWidth: 600 });
+  type OuterHtmlArg = Parameters<typeof adaptor.outerHTML>[0];
+  const node = document.convert(content, {
+    display,
+    em: 16,
+    ex: 8,
+    containerWidth: 600,
+  }) as OuterHtmlArg;
   const html = adaptor.outerHTML(node);
-  const css = adaptor.outerHTML(outputJax.styleSheet(document) as SafeAny);
+  const css = adaptor.outerHTML(outputJax.styleSheet(document) as OuterHtmlArg);
   return juice(html + css);
 }
 

@@ -1,5 +1,4 @@
 import { requestUrl } from 'obsidian';
-import { SafeAny } from '../../core/types';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT';
 
@@ -13,8 +12,8 @@ export class RestClient {
   async request(
     method: HttpMethod,
     path: string,
-    options?: { headers?: Record<string, string>; body?: SafeAny },
-  ): Promise<SafeAny> {
+    options?: { headers?: Record<string, string>; body?: unknown },
+  ): Promise<unknown> {
     const cleanPath = path.startsWith('/') ? path.slice(1) : path;
     const response = await requestUrl({
       url: `${this.baseUrl}/${cleanPath}`,

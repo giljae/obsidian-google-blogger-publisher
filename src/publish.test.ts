@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { App } from 'obsidian';
 import { buildContent } from './publish';
 import { DEFAULT_SETTINGS } from './settings';
 
@@ -10,8 +11,7 @@ describe('buildContent', () => {
       title: 't',
       labels: [],
       sourcePath: '',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      app: null as any,
+      app: null as unknown as App,
     });
     expect(['ok', 'warn', 'over']).toContain(result.status);
     expect(result.html).toContain('obsidian-blogger-post');

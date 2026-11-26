@@ -1,7 +1,7 @@
 import { BloggerProfile } from './blogger/profile';
 import { ImageOutputFormat } from './core/image/encode-image';
 import { DEFAULT_SVG_TEXT_COLOR } from './core/markdown/svg-color';
-import { MathJaxOutputType, PostStatus, SafeAny } from './core/types';
+import { MathJaxOutputType, PostStatus } from './core/types';
 import { LanguageWithAuto } from './i18n';
 
 export type SettingsVersion = '1';
@@ -80,6 +80,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 };
 
 /** Merge stored data with defaults, filling any field added in a later version. */
-export function upgradeSettings(existing: SafeAny): PluginSettings {
-  return { ...DEFAULT_SETTINGS, ...(existing ?? {}) };
+export function upgradeSettings(existing: unknown): PluginSettings {
+  const data = (existing ?? {}) as Partial<PluginSettings>;
+  return { ...DEFAULT_SETTINGS, ...data };
 }

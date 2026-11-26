@@ -14,7 +14,7 @@ export async function readNote(
 ): Promise<{ content: string; matter: MatterData }> {
   let matter: MatterData | undefined = app.metadataCache.getFileCache(file)?.frontmatter;
   if (!matter) {
-    await app.fileManager.processFrontMatter(file, (fm) => {
+    await app.fileManager.processFrontMatter(file, (fm: MatterData) => {
       matter = fm;
     });
   }
@@ -28,7 +28,7 @@ export async function writePostMeta(
   file: TFile,
   meta: { postId: string; profileName: string },
 ): Promise<void> {
-  await app.fileManager.processFrontMatter(file, (fm) => {
+  await app.fileManager.processFrontMatter(file, (fm: Record<string, unknown>) => {
     fm.postId = meta.postId;
     fm.profileName = meta.profileName;
   });

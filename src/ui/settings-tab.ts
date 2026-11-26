@@ -2,7 +2,7 @@ import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { ImageOutputFormat } from '../core/image/encode-image';
 import { getGlobalMarkdownParser, setGlobalMarkdownHtml, setupMathJax } from '../core/markdown/render';
 import { MathJaxOutputType, PostStatus } from '../core/types';
-import { LanguageWithAuto, TranslateKey, getGlobalI18n, setGlobalLang } from '../i18n';
+import { TranslateKey, getGlobalI18n } from '../i18n';
 import { PluginSettings } from '../settings';
 import { renderSection } from './components/section';
 

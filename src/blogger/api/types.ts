@@ -1,4 +1,4 @@
-import { PostStatus, SafeAny } from '../../core/types';
+import { PostStatus } from '../../core/types';
 
 export const BloggerClientReturnCode = {
   OK: 'OK',
@@ -34,8 +34,8 @@ export interface BloggerPublishResult {
 }
 
 export type BloggerClientResult<T> =
-  | { code: typeof BloggerClientReturnCode.OK; data: T; response?: SafeAny }
-  | { code: typeof BloggerClientReturnCode.Error; message: string; response?: SafeAny };
+  | { code: typeof BloggerClientReturnCode.OK; data: T; response?: unknown }
+  | { code: typeof BloggerClientReturnCode.Error; message: string; response?: unknown };
 
 export interface BloggerClient {
   /**

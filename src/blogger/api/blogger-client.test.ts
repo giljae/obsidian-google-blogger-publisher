@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { requestUrl } from 'obsidian';
 import { BloggerApiClient } from './blogger-client';
 import { isMissingPostResult } from './post-status';

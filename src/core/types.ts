@@ -12,7 +12,5 @@ export const MathJaxOutputType = {
 } as const;
 export type MathJaxOutputType = (typeof MathJaxOutputType)[keyof typeof MathJaxOutputType];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type SafeAny = any;
-
-export type MatterData = { [p: string]: SafeAny };
+/** Parsed YAML front matter of a note. */
+export type MatterData = Record<string, unknown>;

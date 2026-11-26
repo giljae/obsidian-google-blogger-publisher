@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { requestUrl } from 'obsidian';
 import { OAuth2Client } from './client';
 import { InternalOAuth2Token } from './token';

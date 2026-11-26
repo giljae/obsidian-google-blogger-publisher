@@ -101,11 +101,12 @@ export async function publishActiveNote(
     let postId = typeof matter.postId === 'string' ? matter.postId : undefined;
 
     // If the note was last published under a different profile, ask the user.
-    if (matter.profileName && matter.profileName !== profile.name) {
+    const previousProfile = typeof matter.profileName === 'string' ? matter.profileName : '';
+    if (previousProfile && previousProfile !== profile.name) {
       const confirm = await openConfirmModal(
         {
           message: t.t('error_profileNotMatch'),
-          cancelText: t.t('profileNotMatch_useOld', { profileName: String(matter.profileName) }),
+          cancelText: t.t('profileNotMatch_useOld', { profileName: previousProfile }),
           confirmText: t.t('profileNotMatch_useNew', { profileName: profile.name }),
         },
         app,

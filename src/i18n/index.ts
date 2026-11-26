@@ -31,7 +31,7 @@ export class I18n {
   }
 
   private dict(lang: Language): Record<string, string> {
-    return LANGUAGES[lang] as Record<string, string>;
+    return LANGUAGES[lang];
   }
 }
 

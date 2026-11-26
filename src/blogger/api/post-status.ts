@@ -21,10 +21,7 @@ export type PostStatusAction = 'publish' | 'revert' | 'none';
  * draft/live switch requires the dedicated `posts.publish` / `posts.revert`
  * endpoints.
  */
-export function statusChangeAction(
-  target: PostStatus,
-  current: PostStatus | string | undefined,
-): PostStatusAction {
+export function statusChangeAction(target: PostStatus, current?: string): PostStatusAction {
   if (target === PostStatus.Live && current === PostStatus.Draft) {
     return 'publish';
   }

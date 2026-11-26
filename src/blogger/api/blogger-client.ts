@@ -1,5 +1,5 @@
 import { BLOGGER_API_ENDPOINT } from '../../consts';
-import { PostStatus, SafeAny } from '../../core/types';
+import { PostStatus } from '../../core/types';
 import { getGlobalI18n } from '../../i18n';
 import { OAuth2Client } from '../oauth2/client';
 import { InternalOAuth2Token } from '../oauth2/token';
@@ -18,6 +18,13 @@ export interface BloggerApiClientDeps {
   oauth2: OAuth2Client;
   /** Persist a refreshed token back to the profile. */
   onTokenRefreshed: (token: InternalOAuth2Token) => Promise<void>;
+}
+
+interface BloggerApiResponse {
+  id?: string;
+  url?: string;
+  status?: string;
+  error?: { code?: number; message?: string };
 }
 
 export class BloggerApiClient {
@@ -45,15 +52,14 @@ export class BloggerApiClient {
       status: params.status,
     };
 
-    const response: SafeAny = params.postId
+    const response = (params.postId
       ? await this.rest.request('PUT', `/${blogId}/posts/${params.postId}`, { headers, body })
-      : await this.rest.request(
-          'POST',
-          `/${blogId}/posts?isDraft=${params.status === PostStatus.Draft}`,
-          { headers, body },
-        );
+      : await this.rest.request('POST', `/${blogId}/posts?isDraft=${params.status === PostStatus.Draft}`, {
+          headers,
+          body,
+        })) as BloggerApiResponse;
 
-    if (response?.error) {
+    if (response.error) {
       return {
         code: BloggerClientReturnCode.Error,
         message: t.t('error_requestFailed', {
@@ -68,18 +74,18 @@ export class BloggerApiClient {
     if (params.postId) {
       const action = statusChangeAction(params.status, response.status);
       if (action !== 'none') {
-        const actionResponse: SafeAny = await this.rest.request(
+        const actionResponse = (await this.rest.request(
           'POST',
           `/${blogId}/posts/${params.postId}/${action}`,
           { headers, body: {} },
-        );
-        if (actionResponse && !actionResponse.error && actionResponse.status) {
+        )) as BloggerApiResponse;
+        if (!actionResponse.error && actionResponse.status) {
           response.status = actionResponse.status;
         }
       }
     }
 
-    if (!response?.id) {
+    if (!response.id) {
       return {
         code: BloggerClientReturnCode.Error,
         message: t.t('error_cannotParseResponse'),
@@ -89,7 +95,11 @@ export class BloggerApiClient {
 
     return {
       code: BloggerClientReturnCode.OK,
-      data: { postId: response.id, url: response.url, status: response.status },
+      data: {
+        postId: response.id,
+        url: response.url ?? '',
+        status: response.status as PostStatus,
+      },
       response,
     };
   }

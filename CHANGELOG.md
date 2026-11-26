@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.2
+
+- Fixed community directory checks: removed `any`/`SafeAny` from the type surface, typed Blogger API responses, and set `minAppVersion` to 1.4.4 to match the APIs used (`processFrontMatter`, `ButtonComponent.setDisabled`).
+- Dropped the `builtin-modules` and `lodash-es` dependencies.
+- Added an ESLint setup using `eslint-plugin-obsidianmd`.
+- Removed the `all` CSS reset.
+
 ## 0.1.1
 
 - Reworded the plugin description (removed the redundant word "Obsidian") to satisfy the community directory checks.

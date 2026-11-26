@@ -101,7 +101,7 @@ export class ProfilesModal extends Modal {
       .addButton((button) =>
         button
           .setButtonText(t.t('profiles_delete'))
-          .setWarning()
+          .setClass('mod-warning')
           .onClick(() => void this.deleteProfile()),
       )
       .addButton((button) =>

@@ -1,8 +1,8 @@
 {
   "id": "google-blogger-publisher",
   "name": "Google Blogger Publisher",
-  "version": "0.1.1",
-  "minAppVersion": "1.1.1",
+  "version": "0.1.2",
+  "minAppVersion": "1.4.4",
   "description": "Publish notes to Google Blogger, with tables and images that render correctly.",
   "author": "Giljae Joo",
   "isDesktopOnly": true

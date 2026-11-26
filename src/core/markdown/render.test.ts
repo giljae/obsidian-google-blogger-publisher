@@ -33,8 +33,7 @@ describe('render pipeline', () => {
     const md = createMarkdownParser();
     setupMathJax(md, MathJaxOutputType.SVG);
     setupMathJax(md, MathJaxOutputType.SVG);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rules = (md.inline.ruler as any).__rules__ as { name: string }[];
-    expect(rules.filter((rule) => rule.name === 'math_inline')).toHaveLength(1);
+    const ruler = md.inline.ruler as unknown as { __rules__: { name: string }[] };
+    expect(ruler.__rules__.filter((rule) => rule.name === 'math_inline')).toHaveLength(1);
   });
 });
