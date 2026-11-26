@@ -55,3 +55,62 @@
   background: var(--interactive-accent);
   color: var(--text-on-accent, #fff);
 }
+
+/* Profiles modal */
+.gbp-profiles-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.gbp-profiles-body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 1.5em;
+  align-items: start;
+}
+
+.gbp-profiles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gbp-profile-item {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m, 8px);
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.gbp-profile-item.is-selected {
+  border-color: var(--interactive-accent);
+  background: var(--background-modifier-hover);
+}
+
+.gbp-profile-domain {
+  font-size: var(--font-ui-smaller, 11px);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gbp-badge {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: var(--font-ui-smaller, 11px);
+}
+
+.gbp-badge.is-connected {
+  color: var(--text-success, #2e7d32);
+}
+
+.gbp-badge.is-warning {
+  color: var(--text-warning, #b26a00);
+}
+
+.gbp-empty {
+  color: var(--text-muted);
+}

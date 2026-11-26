@@ -2,9 +2,11 @@ import { Plugin } from 'obsidian';
 import { getGlobalMarkdownParser, setGlobalMarkdownHtml, setupMathJax } from './core/markdown/render';
 import { getGlobalI18n, setGlobalLang } from './i18n';
 import { addIcons } from './icons';
+import { OAuth2Client } from './blogger/oauth2/client';
 import { PublishDeps, publishActiveNote } from './publish';
 import { showError } from './platform/notices';
-import { DEFAULT_SETTINGS, PluginSettings, upgradeSettings } from './settings';
+import { DEFAULT_SETTINGS, PluginSettings, isPluginSettingsWithOAuth2, upgradeSettings } from './settings';
+import { ProfilesModal } from './ui/modals/profiles-modal';
 import { PublishModal } from './ui/modals/publish-modal';
 import { BloggerSettingsTab } from './ui/settings-tab';
 
@@ -87,5 +89,20 @@ export default class GoogleBloggerPublisher extends Plugin {
     }).open();
   };
 
-  private openProfiles(): void {}
+  private openProfiles = (): void => {
+    if (!isPluginSettingsWithOAuth2(this.settings)) {
+      showError(getGlobalI18n().t('error_noOAuth2ClientCredentials'));
+      return;
+    }
+    new ProfilesModal({
+      app: this.app,
+      getSettings: () => this.settings,
+      saveSettings: this.saveSettings,
+      getOAuth2: () =>
+        new OAuth2Client({
+          clientId: this.settings.clientId ?? '',
+          clientSecret: this.settings.clientSecret ?? '',
+        }),
+    }).open();
+  };
 }
