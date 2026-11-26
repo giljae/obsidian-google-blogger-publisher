@@ -25,3 +25,33 @@
     transform: rotate(360deg);
   }
 }
+
+.gbp-publishing {
+  min-width: 4.5em;
+}
+
+.gbp-publish-note {
+  margin-top: -0.5em;
+  color: var(--text-muted);
+}
+
+.gbp-segmented {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: var(--radius-s, 6px);
+  background: var(--background-modifier-border, rgba(0, 0, 0, 0.08));
+}
+
+.gbp-segmented-btn {
+  all: unset;
+  cursor: pointer;
+  padding: 4px 14px;
+  border-radius: var(--radius-s, 6px);
+  font-size: var(--font-ui-small, 13px);
+  color: var(--text-muted);
+}
+
+.gbp-segmented-btn.is-active {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent, #fff);
+}
