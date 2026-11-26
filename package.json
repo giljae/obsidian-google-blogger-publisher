@@ -1,7 +1,7 @@
 {
   "name": "obsidian-google-blogger-publisher",
-  "version": "0.1.0",
-  "description": "Publish Obsidian notes to Google Blogger, with tables and images that render correctly.",
+  "version": "0.1.1",
+  "description": "Publish notes to Google Blogger, with tables and images that render correctly.",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",

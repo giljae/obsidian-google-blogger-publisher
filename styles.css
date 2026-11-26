@@ -43,10 +43,12 @@
 }
 
 .gbp-segmented-btn {
-  all: unset;
   cursor: pointer;
   padding: 4px 14px;
+  border: none;
+  background: transparent;
   border-radius: var(--radius-s, 6px);
+  font: inherit;
   font-size: var(--font-ui-small, 13px);
   color: var(--text-muted);
 }

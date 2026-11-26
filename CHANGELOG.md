@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1
+
+- Reworded the plugin description (removed the redundant word "Obsidian") to satisfy the community directory checks.
+- Replaced the `all` CSS reset with explicit properties (CSS lint).
+
 ## 0.1.0
 
 - First release.
