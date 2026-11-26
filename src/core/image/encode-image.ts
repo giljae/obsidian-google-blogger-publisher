@@ -109,7 +109,7 @@ export async function encodeImageDataUri(
     const width = Math.max(1, Math.round(bitmap.width * scale));
     const height = Math.max(1, Math.round(bitmap.height * scale));
 
-    const canvas = document.createElement('canvas');
+    const canvas = activeDocument.createEl('canvas');
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');

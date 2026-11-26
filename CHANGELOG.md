@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4
+
+- Use Obsidian DOM helpers () for canvas creation, and avoid returning a value from a  callback.
+
 ## 0.1.3
 
 - Releases are now built and published by GitHub Actions, with build provenance attestations for `main.js`, `manifest.json`, and `styles.css`.

@@ -47,9 +47,9 @@ export class PublishModal extends Modal {
 
     if (this.deps.profiles.length > 1) {
       new Setting(contentEl).setName(t.t('publishModal_profile')).addDropdown((dropdown) => {
-        this.deps.profiles.forEach((p) =>
-          dropdown.addOption(p.name, p.isDefault ? `${p.name} ★` : p.name),
-        );
+        this.deps.profiles.forEach((p) => {
+          dropdown.addOption(p.name, p.isDefault ? `${p.name} ★` : p.name);
+        });
         dropdown.setValue(this.profile.name).onChange((value) => {
           this.profile = this.deps.profiles.find((p) => p.name === value) ?? this.profile;
         });
