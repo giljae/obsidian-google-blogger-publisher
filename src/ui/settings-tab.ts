@@ -1,14 +1,12 @@
-import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import { ImageOutputFormat } from '../core/image/encode-image';
+import { PluginSettingTab, SettingDefinitionAction, SettingDefinitionItem } from 'obsidian';
 import { getGlobalMarkdownParser, setGlobalMarkdownHtml, setupMathJax } from '../core/markdown/render';
 import { MathJaxOutputType, PostStatus } from '../core/types';
 import { TranslateKey, getGlobalI18n } from '../i18n';
 import { PluginSettings } from '../settings';
-import { renderSection } from './components/section';
 
 export interface SettingsTabDeps {
-  app: App;
-  plugin: Plugin;
+  app: import('obsidian').App;
+  plugin: import('obsidian').Plugin;
   getSettings: () => PluginSettings;
   saveSettings: () => Promise<void>;
   manageProfiles: () => void;
@@ -19,170 +17,139 @@ export class BloggerSettingsTab extends PluginSettingTab {
     super(deps.app, deps.plugin);
   }
 
-  display(): void {
-    const t = (key: TranslateKey, vars?: Record<string, string>): string =>
-      getGlobalI18n().t(key, vars);
+  getSettingDefinitions(): SettingDefinitionItem[] {
+    const t = (key: TranslateKey): string => getGlobalI18n().t(key);
     const settings = this.deps.getSettings();
-    const save = this.deps.saveSettings;
-    const { containerEl } = this;
-    containerEl.empty();
 
-    // ---- Account ----
-    renderSection(containerEl, t('settings_account'));
-    new Setting(containerEl)
-      .setName(t('settings_clientId'))
-      .setDesc(t('settings_clientIdDesc'))
-      .addText((text) =>
-        text.setValue(settings.clientId ?? '').onChange(async (value) => {
-          settings.clientId = value;
-          await save();
-        }),
-      );
-    new Setting(containerEl)
-      .setName(t('settings_clientSecret'))
-      .setDesc(t('settings_clientSecretDesc'))
-      .addText((text) =>
-        text.setValue(settings.clientSecret ?? '').onChange(async (value) => {
-          settings.clientSecret = value;
-          await save();
-        }),
-      );
+    const manageAction: SettingDefinitionAction = {
+      name: t('settings_profiles'),
+      desc: String(settings.profiles.length),
+      action: () => this.deps.manageProfiles(),
+    };
 
-    // ---- Profiles ----
-    renderSection(containerEl, t('settings_profiles'));
-    new Setting(containerEl)
-      .setName(t('settings_profiles'))
-      .setDesc(`${settings.profiles.length}`)
-      .addButton((button) =>
-        button
-          .setButtonText(t('settings_manage'))
-          .setCta()
-          .onClick(() => this.deps.manageProfiles()),
-      );
+    return [
+      {
+        type: 'group',
+        heading: t('settings_account'),
+        items: [
+          {
+            name: t('settings_clientId'),
+            desc: t('settings_clientIdDesc'),
+            control: { type: 'text', key: 'clientId' },
+          },
+          {
+            name: t('settings_clientSecret'),
+            desc: t('settings_clientSecretDesc'),
+            control: { type: 'text', key: 'clientSecret' },
+          },
+        ],
+      },
+      {
+        type: 'group',
+        heading: t('settings_profiles'),
+        items: [manageAction],
+      },
+      {
+        type: 'group',
+        heading: t('settings_publishing'),
+        items: [
+          {
+            name: t('settings_defaultStatus'),
+            desc: t('settings_defaultStatusDesc'),
+            control: {
+              type: 'dropdown',
+              key: 'defaultPostStatus',
+              options: {
+                [PostStatus.Draft]: t('settings_defaultStatusDraft'),
+                [PostStatus.Live]: t('settings_defaultStatusLive'),
+              },
+            },
+          },
+          {
+            name: t('settings_openAfterPublish'),
+            desc: t('settings_openAfterPublishDesc'),
+            control: { type: 'toggle', key: 'openPublishedPageWithBrowser' },
+          },
+        ],
+      },
+      {
+        type: 'group',
+        heading: t('settings_contentImages'),
+        items: [
+          {
+            name: t('settings_enableHtml'),
+            desc: t('settings_enableHtmlDesc'),
+            control: { type: 'toggle', key: 'enableHtml' },
+          },
+          {
+            name: t('settings_mathJaxOutput'),
+            desc: t('settings_mathJaxOutputDesc'),
+            control: {
+              type: 'dropdown',
+              key: 'mathJaxOutputType',
+              options: {
+                [MathJaxOutputType.TeX]: t('settings_mathJaxTeX'),
+                [MathJaxOutputType.SVG]: t('settings_mathJaxSVG'),
+              },
+            },
+          },
+          {
+            name: t('settings_embedImages'),
+            desc: t('settings_embedImagesDesc'),
+            control: { type: 'toggle', key: 'embedLocalImages' },
+          },
+          {
+            name: t('settings_imageMaxWidth'),
+            desc: t('settings_imageMaxWidthDesc'),
+            control: { type: 'number', key: 'imageMaxWidth', min: 100 },
+          },
+          {
+            name: t('settings_imageQuality'),
+            desc: t('settings_imageQualityDesc'),
+            control: { type: 'number', key: 'imageQuality', min: 0.1, max: 1, step: 0.05 },
+          },
+          {
+            name: t('settings_imageFormat'),
+            desc: t('settings_imageFormatDesc'),
+            control: {
+              type: 'dropdown',
+              key: 'imageFormat',
+              options: {
+                auto: t('settings_imageFormatAuto'),
+                jpeg: t('settings_imageFormatJpeg'),
+                png: t('settings_imageFormatPng'),
+                webp: t('settings_imageFormatWebp'),
+              },
+            },
+          },
+          {
+            name: t('settings_autoFit'),
+            desc: t('settings_autoFitDesc'),
+            control: { type: 'toggle', key: 'autoFitPostSize' },
+          },
+          {
+            name: t('settings_svgColor'),
+            desc: t('settings_svgColorDesc'),
+            control: { type: 'text', key: 'svgTextColor' },
+          },
+        ],
+      },
+    ];
+  }
 
-    // ---- Publishing defaults ----
-    renderSection(containerEl, t('settings_publishing'));
-    new Setting(containerEl)
-      .setName(t('settings_defaultStatus'))
-      .setDesc(t('settings_defaultStatusDesc'))
-      .addDropdown((dropdown) =>
-        dropdown
-          .addOption(PostStatus.Draft, t('settings_defaultStatusDraft'))
-          .addOption(PostStatus.Live, t('settings_defaultStatusLive'))
-          .setValue(settings.defaultPostStatus)
-          .onChange(async (value) => {
-            settings.defaultPostStatus = value as PostStatus;
-            await save();
-          }),
-      );
-    new Setting(containerEl)
-      .setName(t('settings_openAfterPublish'))
-      .setDesc(t('settings_openAfterPublishDesc'))
-      .addToggle((toggle) =>
-        toggle.setValue(settings.openPublishedPageWithBrowser).onChange(async (value) => {
-          settings.openPublishedPageWithBrowser = value;
-          await save();
-        }),
-      );
+  getControlValue(key: string): unknown {
+    return (this.deps.getSettings() as unknown as Record<string, unknown>)[key];
+  }
 
-    // ---- Content & images ----
-    renderSection(containerEl, t('settings_contentImages'));
-    new Setting(containerEl)
-      .setName(t('settings_enableHtml'))
-      .setDesc(t('settings_enableHtmlDesc'))
-      .addToggle((toggle) =>
-        toggle.setValue(settings.enableHtml).onChange(async (value) => {
-          settings.enableHtml = value;
-          setGlobalMarkdownHtml(value);
-          await save();
-        }),
-      );
-    new Setting(containerEl)
-      .setName(t('settings_mathJaxOutput'))
-      .setDesc(t('settings_mathJaxOutputDesc'))
-      .addDropdown((dropdown) =>
-        dropdown
-          .addOption(MathJaxOutputType.TeX, t('settings_mathJaxTeX'))
-          .addOption(MathJaxOutputType.SVG, t('settings_mathJaxSVG'))
-          .setValue(settings.mathJaxOutputType)
-          .onChange(async (value) => {
-            settings.mathJaxOutputType = value as MathJaxOutputType;
-            setupMathJax(getGlobalMarkdownParser(), settings.mathJaxOutputType);
-            await save();
-            this.display();
-          }),
-      );
-    new Setting(containerEl)
-      .setName(t('settings_embedImages'))
-      .setDesc(t('settings_embedImagesDesc'))
-      .addToggle((toggle) =>
-        toggle.setValue(settings.embedLocalImages).onChange(async (value) => {
-          settings.embedLocalImages = value;
-          await save();
-        }),
-      );
-    new Setting(containerEl)
-      .setName(t('settings_imageMaxWidth'))
-      .setDesc(t('settings_imageMaxWidthDesc'))
-      .addText((text) => {
-        text.inputEl.type = 'number';
-        text.inputEl.min = '100';
-        text.setValue(String(settings.imageMaxWidth)).onChange(async (value) => {
-          const parsed = Number.parseInt(value, 10);
-          if (!Number.isNaN(parsed) && parsed >= 100) {
-            settings.imageMaxWidth = parsed;
-            await save();
-          }
-        });
-      });
-    new Setting(containerEl)
-      .setName(t('settings_imageQuality'))
-      .setDesc(t('settings_imageQualityDesc'))
-      .addText((text) => {
-        text.inputEl.type = 'number';
-        text.inputEl.min = '0.1';
-        text.inputEl.max = '1';
-        text.inputEl.step = '0.05';
-        text.setValue(String(settings.imageQuality)).onChange(async (value) => {
-          const parsed = Number.parseFloat(value);
-          if (!Number.isNaN(parsed) && parsed > 0 && parsed <= 1) {
-            settings.imageQuality = parsed;
-            await save();
-          }
-        });
-      });
-    new Setting(containerEl)
-      .setName(t('settings_imageFormat'))
-      .setDesc(t('settings_imageFormatDesc'))
-      .addDropdown((dropdown) =>
-        dropdown
-          .addOption('auto', t('settings_imageFormatAuto'))
-          .addOption('jpeg', t('settings_imageFormatJpeg'))
-          .addOption('png', t('settings_imageFormatPng'))
-          .addOption('webp', t('settings_imageFormatWebp'))
-          .setValue(settings.imageFormat)
-          .onChange(async (value) => {
-            settings.imageFormat = value as ImageOutputFormat;
-            await save();
-          }),
-      );
-    new Setting(containerEl)
-      .setName(t('settings_autoFit'))
-      .setDesc(t('settings_autoFitDesc'))
-      .addToggle((toggle) =>
-        toggle.setValue(settings.autoFitPostSize).onChange(async (value) => {
-          settings.autoFitPostSize = value;
-          await save();
-        }),
-      );
-    new Setting(containerEl)
-      .setName(t('settings_svgColor'))
-      .setDesc(t('settings_svgColorDesc'))
-      .addText((text) =>
-        text.setValue(settings.svgTextColor).onChange(async (value) => {
-          settings.svgTextColor = value.trim();
-          await save();
-        }),
-      );
+  setControlValue(key: string, value: unknown): void | Promise<void> {
+    const settings = this.deps.getSettings() as unknown as Record<string, unknown>;
+    settings[key] = key === 'svgTextColor' && typeof value === 'string' ? value.trim() : value;
+
+    if (key === 'enableHtml') {
+      setGlobalMarkdownHtml(Boolean(value));
+    } else if (key === 'mathJaxOutputType') {
+      setupMathJax(getGlobalMarkdownParser(), value as MathJaxOutputType);
+    }
+    return this.deps.saveSettings();
   }
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5
+
+- Adopted the declarative settings API (`getSettingDefinitions`), so settings appear in Obsidian's settings search. This raises `minAppVersion` to 1.13.0.
+
 ## 0.1.4
 
 - Used the Obsidian DOM helper `activeDocument.createEl` for canvas creation, and avoided returning a value from a `forEach` callback.
