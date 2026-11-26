@@ -114,3 +114,17 @@
 .gbp-empty {
   color: var(--text-muted);
 }
+
+/* Design tokens / polish */
+.gbp-profiles-form .setting-item,
+.gbp-profiles-modal .setting-item {
+  border-top: none;
+}
+
+.gbp-profiles-modal h1 {
+  margin-bottom: 0.5em;
+}
+
+.setting-item-heading {
+  margin-top: 1.2em;
+}
