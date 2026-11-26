@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.6
+
+- Always show the ribbon icon, using the Blogger "B" mark.
+
 ## 0.1.5
 
 - Adopted the declarative settings API (`getSettingDefinitions`), so settings appear in Obsidian's settings search. This raises `minAppVersion` to 1.13.0.

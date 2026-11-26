@@ -20,11 +20,9 @@ export default class GoogleBloggerPublisher extends Plugin {
     setupMathJax(getGlobalMarkdownParser(), this.settings.mathJaxOutputType);
     setGlobalMarkdownHtml(this.settings.enableHtml);
 
-    if (this.settings.showRibbonIcon) {
-      this.addRibbonIcon('blogger-logo', getGlobalI18n().t('ribbon_iconTitle'), () =>
-        this.publishLive(),
-      );
-    }
+    this.addRibbonIcon('blogger-logo', getGlobalI18n().t('ribbon_iconTitle'), () =>
+      this.publishLive(),
+    );
 
     this.addCommand({
       id: 'publishWithDefault',

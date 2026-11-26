@@ -1,13 +1,12 @@
 import { addIcon } from 'obsidian';
 
-/** Register the plugin's ribbon icon. */
+/** The Blogger "B" mark: an orange rounded square with a white B. */
 export function addIcons(): void {
   addIcon(
     'blogger-logo',
-    `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M4 4.5A1.5 1.5 0 0 1 5.5 3h9.2L20 8.3v11.2a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.5z"/>
-      <path d="M14 3v6h6"/>
-      <path d="M8 13h8M8 17h5"/>
+    `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="1.25" y="1.25" width="21.5" height="21.5" rx="5.25" fill="#ff5722"/>
+      <text x="12" y="17.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#ffffff">B</text>
     </svg>`,
   );
 }
