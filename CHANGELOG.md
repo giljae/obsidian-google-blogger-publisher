@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.7
+
+- Fixed large images being embedded without compression. `activeDocument.createEl('canvas')` threw `HierarchyRequestError` (a document only allows one element child), so every image silently fell back to the raw, uncompressed bytes and posts exceeded Blogger's 2 MiB limit. The canvas is now created with `createElement`.
+
 ## 0.1.6
 
 - Always show the ribbon icon, using the Blogger "B" mark.

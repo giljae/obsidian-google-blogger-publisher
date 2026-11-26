@@ -109,7 +109,11 @@ export async function encodeImageDataUri(
     const width = Math.max(1, Math.round(bitmap.width * scale));
     const height = Math.max(1, Math.round(bitmap.height * scale));
 
-    const canvas = activeDocument.createEl('canvas');
+    // Create a detached canvas. Do NOT use Obsidian's `createEl` helper here:
+    // it appends the new node to its receiver, and appending to a Document
+    // throws HierarchyRequestError, which would silently drop us back to the
+    // raw (uncompressed) image bytes.
+    const canvas = activeDocument.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
