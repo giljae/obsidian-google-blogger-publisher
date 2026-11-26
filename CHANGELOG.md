@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+- Releases are now built and published by GitHub Actions, with build provenance attestations for `main.js`, `manifest.json`, and `styles.css`.
+
 ## 0.1.2
 
 - Fixed community directory checks: removed `any`/`SafeAny` from the type surface, typed Blogger API responses, and set `minAppVersion` to 1.4.4 to match the APIs used (`processFrontMatter`, `ButtonComponent.setDisabled`).
