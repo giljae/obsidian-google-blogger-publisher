@@ -2,7 +2,7 @@
 
 ## 0.1.4
 
-- Use Obsidian DOM helpers () for canvas creation, and avoid returning a value from a  callback.
+- Used the Obsidian DOM helper `activeDocument.createEl` for canvas creation, and avoided returning a value from a `forEach` callback.
 
 ## 0.1.3
 
