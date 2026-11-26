@@ -3,6 +3,7 @@ import { getGlobalMarkdownParser, setGlobalMarkdownHtml, setupMathJax } from './
 import { getGlobalI18n, setGlobalLang } from './i18n';
 import { addIcons } from './icons';
 import { DEFAULT_SETTINGS, PluginSettings, upgradeSettings } from './settings';
+import { BloggerSettingsTab } from './ui/settings-tab';
 
 export default class GoogleBloggerPublisher extends Plugin {
   settings: PluginSettings = DEFAULT_SETTINGS;
@@ -30,6 +31,16 @@ export default class GoogleBloggerPublisher extends Plugin {
       name: getGlobalI18n().t('command_publish'),
       editorCallback: () => this.publishLive(),
     });
+
+    this.addSettingTab(
+      new BloggerSettingsTab({
+        app: this.app,
+        plugin: this,
+        getSettings: () => this.settings,
+        saveSettings: this.saveSettings,
+        manageProfiles: () => this.openProfiles(),
+      }),
+    );
   };
 
   onunload = (): void => {};
@@ -45,4 +56,5 @@ export default class GoogleBloggerPublisher extends Plugin {
   // Filled in by later tasks.
   private publishWithDefault(): void {}
   private publishLive(): void {}
+  private openProfiles(): void {}
 }

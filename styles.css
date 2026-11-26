@@ -1,0 +1,27 @@
+/* Google Blogger Publisher styles */
+
+.gbp-settings-section {
+  margin-top: 1.5em;
+}
+
+.gbp-progress {
+  display: inline-flex;
+  align-items: center;
+}
+
+.gbp-spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  vertical-align: middle;
+  animation: gbp-spin 0.7s linear infinite;
+}
+
+@keyframes gbp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
