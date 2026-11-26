@@ -28,4 +28,13 @@ describe('render pipeline', () => {
     expect(md.render('![x|200](a.png)')).toContain('width="200"');
     expect(md.render('text[^1]\n\n[^1]: note')).toContain('footnote');
   });
+
+  it('does not duplicate math rules when set up twice', () => {
+    const md = createMarkdownParser();
+    setupMathJax(md, MathJaxOutputType.SVG);
+    setupMathJax(md, MathJaxOutputType.SVG);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rules = (md.inline.ruler as any).__rules__ as { name: string }[];
+    expect(rules.filter((rule) => rule.name === 'math_inline')).toHaveLength(1);
+  });
 });

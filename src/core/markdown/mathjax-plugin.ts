@@ -158,12 +158,18 @@ function mathBlock(state: StateBlock, start: number, end: number, silent: boolea
   return true;
 }
 
-/** Markdown-it plugin rendering `$..$` and `$$..$$` math. */
+/** Parsers whose math rules have already been registered (register once). */
+const configured = new WeakSet<MarkdownIt>();
+
+/** Markdown-it plugin rendering `$..$` and `$$..$$` math. Safe to apply twice. */
 export function mathJaxPlugin(md: MarkdownIt, options: MathJaxPluginOptions): void {
-  md.inline.ruler.after('escape', 'math_inline', mathInline);
-  md.block.ruler.after('blockquote', 'math_block', mathBlock, {
-    alt: ['paragraph', 'reference', 'blockquote', 'list'],
-  });
+  if (!configured.has(md)) {
+    md.inline.ruler.after('escape', 'math_inline', mathInline);
+    md.block.ruler.after('blockquote', 'math_block', mathBlock, {
+      alt: ['paragraph', 'reference', 'blockquote', 'list'],
+    });
+    configured.add(md);
+  }
   md.renderer.rules.math_inline = (tokens: Token[], idx: number): string =>
     renderMath(tokens[idx].content, false, options);
   md.renderer.rules.math_block = (tokens: Token[], idx: number): string =>
