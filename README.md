@@ -14,7 +14,7 @@ Publish your Obsidian notes to Google Blogger — with tables and images that re
 
 ## Requirements
 
-- Obsidian 1.1.1 or newer, on **desktop**.
+- Obsidian 1.13.0 or newer, on **desktop**.
 - A Google account with a blog on [Blogger](https://www.blogger.com).
 - A Google Cloud OAuth2 client ID and secret (created once, see below).
 
